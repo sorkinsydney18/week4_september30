@@ -1,6 +1,6 @@
 ---
 title: "Gov 1372 - Hierarchies"
-author: "Your name here"
+author: "Sydney Sorkin"
 date: "September 30, 2021"
 output: pdf_document
 urlcolor: blue
@@ -12,6 +12,7 @@ library(dplyr) # filter(), group_by(), summarize
 library(readr) # read_csv()
 library(ggplot2) # ggplot()
 library(estimatr) # difference_in_means()
+library(tidyverse)
 ```
 
 # Social Dominance and Politics
@@ -84,6 +85,43 @@ sdo <- read_csv("sdo_data.csv")
 ```
 
 **What is the distribution of social dominance orientation in the sample? Make a plot, and report the mean and standard deviation of SDO in the sample. Extend this problem by splitting the plot by party ID of the respondent. Comment on what you find.**
+
+```{r, q2}
+
+#distribution of sdo in data
+
+sdo %>% 
+  ggplot(aes(x= sdo5)) +
+  geom_density(stat = "count") +
+  labs(title = "Distribution of SDO",
+       x = "SDO Scale")
+
+#mean and SD of SDO scores
+mean(sdo$sdo5)
+sd(sdo$sdo5)
+
+
+
+#pid3 labs
+
+pid3.labs <- c("Democrat", "Independent", "Republican")
+names(pid3.labs) <- c("1", "2", "3")
+
+
+sdo %>% 
+  filter(is.na(pid3)==FALSE) %>% 
+  ggplot(aes(x= sdo5)) +
+  geom_bar() +
+  facet_wrap(~pid3,
+             labeller = labeller(pid3 = pid3.labs)) +
+  labs(title = "Distribution of SDO",
+       x = "SDO Scale")
+
+
+```
+
+
+
 
 ## Question 3
 

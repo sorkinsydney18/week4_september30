@@ -92,9 +92,9 @@ sdo <- read_csv("sdo_data.csv")
 
 sdo %>% 
   ggplot(aes(x= sdo5)) +
-  geom_density(stat = "count") +
-  labs(title = "Distribution of SDO",
-       x = "SDO Scale")
+  geom_bar() +
+  labs(title = "Distribution of Social Dominance Orientation Scores \nFrom Sample of 2018 Voters",
+       x = "SDO Scale (1 min, 5 max)")
 
 #mean and SD of SDO scores
 mean(sdo$sdo5)
@@ -109,13 +109,26 @@ names(pid3.labs) <- c("1", "2", "3")
 
 
 sdo %>% 
-  filter(is.na(pid3)==FALSE) %>% 
   ggplot(aes(x= sdo5)) +
   geom_bar() +
   facet_wrap(~pid3,
              labeller = labeller(pid3 = pid3.labs)) +
-  labs(title = "Distribution of SDO",
+  labs(title = "Distribution of Social Dominance Scores by Self-Identified Party Labels",
+       subtitle = "Sample of 2018 Voters",
        x = "SDO Scale")
+
+#mean of distributions by party
+sdo %>% 
+  group_by(pid3) %>%
+  summarise(mean(sdo5))
+
+
+#SD of distributions by party
+sdo %>% 
+  group_by(pid3) %>%
+  summarise(sd(sdo5))
+
+  
 
 
 ```
@@ -127,8 +140,39 @@ sdo %>%
 
 In the reading for this week, we saw that gender is central to social dominance theory, which predicts that men tend to have higher SDO than women do. **Is this true in this sample as well? Report the average SDO for men and women. Comment on what you find. Extend this question by reporting the difference in means along with the p-value. Is the difference significant at a .05 significance level?**
 
+
+```{r, Q3}
+
+#sdo average by gender
+
+sdo %>% 
+  group_by(female) %>%
+  summarise(mean(sdo5))
+
+sdo %>% 
+  ggplot(aes(x = sdo5)) +
+  geom_density() +
+  facet_wrap(~female)
+
+
+t.test(sdo5 ~ female, data = sdo, var.equal = TRUE, alternative = "greater")
+
+
+```
+
+
 ## Question 4
 **What is the correlation between `sdo5` and the `favor_trump` variable? Is the correlation statistically different from zero? You can use cor.test() for this question. Interpret what you find. If you want, extend this question by creating a scatterplot with the line of best fit to visualize the relationship.  You can use geom_point() in the ggplot architecture for this.**
+```{r}
+
+cor.test(sdo$sdo5, sdo$favor_trump)
+
+
+sdo %>% 
+  ggplot(aes(x = favor_trump, y = sdo5)) +
+  geom_jitter()
+
+```
 
 ## Question 5
 

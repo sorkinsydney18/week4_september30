@@ -192,14 +192,14 @@ Here is an example of what your correlation plot might look like, using the `ggc
 #correlation matrix
 
 corr <- sdo %>% 
-  select(-confederate_flag, -presvote16) 
+  select(-confederate_flag, -presvote16, -age, -educ) 
   
 
-data <- cor(corr, use = "complete.obs")
+data <- round(cor(corr, use = "complete.obs"), 2)
 
 
 ggcorrplot(data, hc.order = TRUE, type = "lower",
-     outline.col = "white", lab = TRUE)
+     outline.col = "white", lab = TRUE, lab_size = 2.4)
 
 
 ```
